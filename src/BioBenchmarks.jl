@@ -64,7 +64,7 @@ end
 function gitrevision()
     commit = chomp(readall(`git rev-parse HEAD`))
     branch = chomp(readall(`git rev-parse --abbrev-ref HEAD`))
-    return string(branch, '(', commit[1:7], ')')
+    return string(branch, '-', commit[1:7])
 end
 
 macro benchmark(ex)

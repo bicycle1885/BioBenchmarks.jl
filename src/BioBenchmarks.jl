@@ -8,17 +8,35 @@ export
 # Benchmark Runner
 # ----------------
 
-const benchmarkdir = Pkg.dir("BioBenchmarks", "benchmarks")
+"""
+    run(revision;
+        force=false,
+        stop_on_error=false,
+        benchmark_directory=Pkg.dir("BioBenchmarks", "benchmarks"),
+        benchmark_scripts=readdir(benchmark_directory))
 
-function run(commit; force=false, benchmark_scripts=readdir(benchmarkdir))
-    revision = cd(Pkg.dir("Bio")) do
-        Base.run(`git checkout $commit`)
+Run benchmark scripts of `revision` and return the filepath of the results.
+
+# Arguments
+* `revision`: Git revision of Bio.jl (branch, tag, or hash).
+* `force`: if `true`, run benchmarks even if the result file exists.
+* `stop_one_error`: if `true`, immediately stop benchmarks when a script fails.
+* `benchmark_directory`: directory of benchmark scripts.
+* `benchmark_scripts`: benchmark script names in `benchmark_directory`.
+"""
+function run(revision;
+             force=false,
+             stop_on_error=false,
+             benchmark_directory=Pkg.dir("BioBenchmarks", "benchmarks"),
+             benchmark_scripts=readdir(benchmark_directory))
+    abbrev = cd(Pkg.dir("Bio")) do
+        Base.run(`git checkout $revision`)
         gitrevision()
     end
 
-    outputfile = "result-$(revision).tsv"
+    outputfile = "results-$(abbrev).tsv"
     if isfile(outputfile) && !force
-        info("use the existing benchmark results of $commit")
+        info("use the existing benchmark results of $revision")
         return outputfile
     end
 

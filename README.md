@@ -5,6 +5,12 @@ Benchmark set of the Bio.jl package.
 
 ## How to run benchmarks
 
+First of all, make sure that requirements in [REQUIRE](/REQUIRE) and the
+following external tools are installed:
+* Jupyter Notebook (http://jupyter.org/)
+* The R language (https://www.r-project.org/)
+* ggplot2 (http://ggplot2.org/)
+
 Copy [template.ipynb](/template.ipynb) in your directory and start the Jupyter
 Notebook server:
 ```
@@ -14,11 +20,14 @@ $ cd notebooks
 $ jupyter notebook
 ```
 
-Then replace `revA` and `revB` variables in the notebook with your
+Then replace the `revs` variable in the notebook with your
 interested revision names to compare:
 ```
-revA = "master"
-revB = "super-performance-improvement"
+revs = [
+    "master",
+    "super-performance-improvement",
+    # and more ...
+]
 ```
 
 Finally, click "Run All" in the "Cell" menu:
@@ -43,10 +52,3 @@ times and measures some metrics such as elapsed time and memory allocation.
 Each evaluation is supposed to take at least a few seconds. `datafile` returns a
 file path that is placed in `data/`. If the require files don't exist, it should
 be automatically downloaded and cached in `data/`.
-
-
-## Requirements not included in REQUIRE
-
-* Jupyter Notebook (http://jupyter.org/)
-* The R language (https://www.r-project.org/)
-* ggplot2 (http://ggplot2.org/)

@@ -45,9 +45,17 @@ function run(revision;
     flush(out)  # this seems to be necessary (but don't know why)
     for script in benchmark_scripts
         info("running $script")
-        Base.run(pipeline(
-            `julia $(joinpath(benchmarkdir, script))`,
-            out))
+        try
+            Base.run(pipeline(
+                `julia $(joinpath(benchmark_directory, script))`,
+                out))
+        catch ex
+            if stop_on_error
+                rethrow()
+            else
+                warn(ex)
+            end
+        end
     end
     close(out)
     return outputfile

@@ -62,12 +62,17 @@ end
 macro benchmark(ex)
     quote
         results = ResultSet(splitext(basename(@__FILE__))[1])
+        total_elapsedtime = UInt64(0)
         $(esc(ex))  # JIT compiling
         for _ in 1:5
+            if total_elapsedtime > 60 * 10^9  # 60 sec
+                break
+            end
             gcstats = Base.gc_num()
             elapsedtime = Base.time_ns()
             $(esc(ex))
             elapsedtime = Base.time_ns() - elapsedtime
+            total_elapsedtime += elapsedtime
             push!(results, Result(elapsedtime, Base.GC_Diff(Base.gc_num(), gcstats)))
         end
         BioBenchmarks.print_results(results)

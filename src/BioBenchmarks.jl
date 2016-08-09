@@ -29,12 +29,12 @@ function run(revision;
              stop_on_error=false,
              benchmark_directory=Pkg.dir("BioBenchmarks", "benchmarks"),
              benchmark_scripts=readdir(benchmark_directory))
-    abbrev = cd(Pkg.dir("Bio")) do
+    suffix = cd(Pkg.dir("Bio")) do
         Base.run(`git checkout $revision`)
         gitrevision()
     end
 
-    outputfile = "results-$(abbrev).tsv"
+    outputfile = "results_$(suffix).tsv"
     if isfile(outputfile) && !force
         info("use the existing benchmark results of $revision")
         return outputfile
@@ -58,13 +58,14 @@ function run(revision;
         end
     end
     close(out)
+
     return outputfile
 end
 
 function gitrevision()
     commit = chomp(readall(`git rev-parse HEAD`))
     branch = chomp(readall(`git rev-parse --abbrev-ref HEAD`))
-    return string(branch, '-', commit[1:7])
+    return string(branch, '_', commit[1:7])
 end
 
 macro benchmark(ex)

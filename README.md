@@ -7,32 +7,10 @@ Benchmark set of the Bio.jl package.
 
 First of all, make sure that requirements in [REQUIRE](/REQUIRE) and the
 following external tools are installed:
-* Jupyter Notebook (http://jupyter.org/)
 * The R language (https://www.r-project.org/)
 * ggplot2 (http://ggplot2.org/)
 
-Copy [template.ipynb](/template.ipynb) in your directory and start the Jupyter
-Notebook server:
-```
-$ mkdir notebooks
-$ cp template.ipynb notebooks/super-performance-improvement.ipynb
-$ cd notebooks
-$ jupyter notebook
-```
-
-Then replace the `revs` variable in the notebook with your
-interested revision names to compare:
-```
-revs = [
-    "master",
-    "super-performance-improvement",
-    # and more ...
-]
-```
-
-Finally, click "Run All" in the "Cell" menu:
-![Run All](/RunAll.png)
-
+Then run the `bin/runbenchmarks.jl` script.
 
 ## How to add new benchmarks
 

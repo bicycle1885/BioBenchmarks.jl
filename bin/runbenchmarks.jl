@@ -3,6 +3,7 @@
 using DocOpt
 using DataFrames
 using RCall
+using Glob
 import BioBenchmarks
 
 args = docopt("Usage: runbenchmarks.jl <revision>...")
@@ -21,6 +22,10 @@ for f in [:elapsed, :gc_time, :allocated]
     results[f] = map(Float64, results[f])
 end
 
+serial = maximum(vcat(0, [parse(Int, splitext(fn)[1][12:end]) for fn in glob("benchmarks_*.png")]))
+plotfile = string("benchmarks_", serial + 1, ".png")
+@rput plotfile
+
 R"""
 library(ggplot2)
 
@@ -31,5 +36,5 @@ ggplot($(results), aes(x=revision, y=elapsed, color=revision)) +
   theme(axis.text.x=element_blank()) +
   expand_limits(y=0)
 
-ggsave("benchmarks.png")
+ggsave(plotfile)
 """
